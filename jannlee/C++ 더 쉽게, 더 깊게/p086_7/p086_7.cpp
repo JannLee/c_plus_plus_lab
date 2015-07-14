@@ -11,7 +11,7 @@ int main(void)
         cout << "Select items (0: exit)" << endl;
         for (int i = 0; i < 3; ++i)
         {
-            cout << i + 1<< " Item" << endl;
+            cout << "\tItem " << i + 1 << endl;
         }
 
         cin >> input;
