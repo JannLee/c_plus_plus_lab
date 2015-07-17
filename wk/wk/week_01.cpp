@@ -6,6 +6,7 @@ using namespace std;
 int main()
 {
 	string item;
+
 	string item1;
 	string item2;
 	string item3;
