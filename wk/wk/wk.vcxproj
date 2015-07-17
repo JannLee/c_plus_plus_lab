@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BE2533E6-A7A6-4620-864A-356C435F8F08}</ProjectGuid>
+    <ProjectGuid>{F9C862B0-96F2-4395-B421-416E1DE842C0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>wk</RootNamespace>
   </PropertyGroup>
@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="week_01.cpp" />
+    <ClCompile Include="week_02.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
