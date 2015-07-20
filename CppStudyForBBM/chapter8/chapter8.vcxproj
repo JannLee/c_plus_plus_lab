@@ -10,6 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA1E9A45-0C24-40E6-A96B-DF249EBD84ED}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -77,9 +80,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\chapter5\main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
