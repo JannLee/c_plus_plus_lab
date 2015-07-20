@@ -15,7 +15,7 @@ int main() {
 			cout << "마이너스 ";
 			in = in * -1;
 		}
-		else if (in == 0) {
+		if (in == 0) {
 			cout << "영";
 		}
 		else {
@@ -32,25 +32,27 @@ int main() {
 		}
 	}
 	cout << endl;
+	cin.get();
 	return 0;
 }
 
 void printNum(int in) {
-	int num = in / 100;
-	if (num != 0)
+	int num = 0;
+	if (in / 100 != 0)
 	{
-		if (num == 1) cout << "원";
-		else if (num == 2)  cout << "투";
-		else if (num == 3)  cout << "쓰리";
-		else if (num == 4)  cout << "포";
-		else if (num == 5)  cout << "파이브";
-		else if (num == 6)  cout << "씩스";
-		else if (num == 7)  cout << "세븐";
-		else if (num == 8)  cout << "에잇";
-		else if (num == 9)  cout << "나인";
+		if (in / 100 == 1) cout << "원";
+		else if (in / 100 == 2)  cout << "투";
+		else if (in / 100 == 3)  cout << "쓰리";
+		else if (in / 100 == 4)  cout << "포";
+		else if (in / 100 == 5)  cout << "파이브";
+		else if (in / 100 == 6)  cout << "씩스";
+		else if (in / 100 == 7)  cout << "세븐";
+		else if (in / 100 == 8)  cout << "에잇";
+		else if (in / 100 == 9)  cout << "나인";
 		cout << " 헌드레드 ";
-		num = in % 100;
+		in = in % 100;
 	}
+	num = in % 100;
 	if (num >= 20)
 	{
 		if (num / 10 == 2)  cout << "투웬티 ";
