@@ -31,16 +31,24 @@ void MiroFree(char** pMiro,int size)
 		pMiro = nullptr;
 	}
 }
-void printfMiro(char** pMiro)
+void printMiro(char** pMiro,int size)
 {
-
+	char** pMiroPrint = pMiro;
+	for (int i = 0; i < size; ++i)
+	{
+		for (int j = 0; j < size; ++j)
+		{
+			
+		}
+	}
 }
 int main()
 {
-	char** pMiro = MiroAlloc(60);
+	int size = 60;
+	char**  pMiro = MiroAlloc(size);
 
 
-	printfMiro();
-	MiroFree(pMiro, 60);
+	printfMiro(pMiro,size);
+	MiroFree(pMiro, size);
 	return 0;
 }
