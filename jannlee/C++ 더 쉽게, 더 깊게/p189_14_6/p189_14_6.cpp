@@ -5,11 +5,6 @@
 
 using namespace std;
 
-const int height = 30;
-const int width = 30;
-
-char map[height][width] = { 0 };
-
 enum Direction
 {
     kUp = 0,
@@ -19,84 +14,338 @@ enum Direction
     kMaxDirection
 };
 
-struct Position
+struct Maze
 {
-    int x;
-    int y;
+    char* buffer;
+    int width;
+    int height;
 };
+
+void InitializeMaze(Maze& maze);
+void FinalizeMaze(Maze& maze);
+
+void GetEntry(Maze& maze, int& x, int& y, Direction& direction);
+
+void SetTile(Maze& maze, const int x, const int y, const char tile);
+char GetTile(const Maze& maze, const int x, const int y);
+
+bool IsDirectionEnable(const  Maze& maze, const int x, const int y, const Direction& direction, bool& isExitCreated);
+void PrintMaze(Maze& maze);
 
 
 int main(void)
 {
+    Maze maze;
+
     srand(time(NULL));
 
-    int width = 0;
-    int height = 0;
+    cout << "너비: ";
+    cin >> maze.width;
+    cout << "높이: ";
+    cin >> maze.height;
 
-    memset(map, '?', sizeof(map));
-
-    for (int i = 0; i < height; ++i)
+    if (maze.width >= 3 && maze.height >= 3)
     {
-        for (int j = 0; j < width; ++j)
+        int entryX = 0;
+        int entryY = 0;
+        int currentX = 0;
+        int currentY = 0;
+        Direction direction;
+        bool isExitCreated = false;
+
+        InitializeMaze(maze);
+        GetEntry(maze, entryX, entryY, direction);
+
+        currentX = entryX;
+        currentY = entryY;
+
+        // 길 만들기
+        while (isExitCreated == false || currentX != entryX && currentY != entryY)
         {
-            if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
+            switch (direction)
             {
-                map[j][i] = "#";
+            case kUp:
+                if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kLeft, isExitCreated))
+                {
+                    --currentX;
+                    direction = kLeft;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kUp, isExitCreated))
+                {
+                    --currentY;
+                    direction = kUp;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kRight, isExitCreated))
+                {
+                    ++currentX;
+                    direction = kRight;
+                }
+                else
+                {
+                    ++currentY;
+                    direction = kDown;
+                }
+                SetTile(maze, currentX, currentY, ' ');
+                break;
+            case kDown:
+                if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kRight, isExitCreated))
+                {
+                    ++currentX;
+                    direction = kRight;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kDown, isExitCreated))
+                {
+                    ++currentY;
+                    direction = kDown;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kLeft, isExitCreated))
+                {
+                    --currentX;
+                    direction = kLeft;
+                }
+                else
+                {
+                    --currentY;
+                    direction = kUp;
+                }
+                SetTile(maze, currentX, currentY, ' ');
+                break;
+            case kLeft:
+                if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kDown, isExitCreated))
+                {
+                    ++currentY;
+                    direction = kDown;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kLeft, isExitCreated))
+                {
+                    --currentX;
+                    direction = kLeft;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kUp, isExitCreated))
+                {
+                    --currentY;
+                    direction = kUp;
+                }
+                else
+                {
+                    ++currentX;
+                    direction = kRight;
+                }
+                SetTile(maze, currentX, currentY, ' ');
+                break;
+            case kRight:
+                if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kUp, isExitCreated))
+                {
+                    --currentY;
+                    direction = kUp;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kRight, isExitCreated))
+                {
+                    ++currentX;
+                    direction = kRight;
+                }
+                else if (rand() % 2 && IsDirectionEnable(maze, currentX, currentY, kDown, isExitCreated))
+                {
+                    ++currentY;
+                    direction = kDown;
+                }
+                else
+                {
+                    --currentX;
+                    direction = kLeft;
+                }
+                SetTile(maze, currentX, currentY, ' ');
+                break;
+            default:
+                break;
             }
-            else
-            {
-                map[j][i] = "?";
-            }
         }
 
-        cout << endl;
-    }
-
-    Position start = { 0, rand() % height };
-    Position goal = { width - 1, rand() % width };
-    Position current = start;
-
-    Direction direction = kRight;
-
-    map[current.y][current.x++] = ' ';
-    map[current.y][current.x] = ' ';
-
-    // 길 만들기
-    while (x != 0 && y != 1)
-    {
-        if (IsDirectionEnable(current, direction))
-        {
-
-        }
-
-    }
-
-    for (int i = 0; i < height; ++i)
-    {
-        for (int j = 0; j < width; ++j)
-        {
-            cout << map[i][j];
-        }
-
-        cout << endl;
+        PrintMaze(maze);
+        FinalizeMaze(maze);
     }
 
 	return 0;
 }
 
-
-bool IsDirectionEnable(Direction& direction, Position& position, int )
+void InitializeMaze(Maze& maze)
 {
+    maze.buffer = new char[maze.width * maze.height];
+
+    for (int iY = 0; iY < maze.height; ++iY)
+    {
+        for (int iX = 0; iX < maze.width; ++iX)
+        {
+            if (iX == 0 || iY == 0 || iX == maze.width - 1 || iY == maze.height - 1)
+            {
+                *(maze.buffer + iX + iY * maze.width) = '#';
+            }
+            else
+            {
+                *(maze.buffer + iX + iY * maze.width) = '?';
+            }
+        }
+    }
+}
+
+void FinalizeMaze(Maze& maze)
+{
+    delete[] maze.buffer;
+    maze.buffer = nullptr;
+}
+
+void GetEntry(Maze& maze, int& x, int& y, Direction& direction)
+{
+    direction = static_cast<Direction>(rand() % 4);
     switch (direction)
     {
     case kUp:
-
+        x = rand() % (maze.width - 2) + 1;
+        y = 0;
+        SetTile(maze, x, y++, ' ');
+        SetTile(maze, x, y, ' ');
+        direction = kDown;
         break;
     case kDown:
+        x = rand() % (maze.width - 2) + 1;
+        y = maze.height - 1;
+        SetTile(maze, x, y--, ' ');
+        SetTile(maze, x, y, ' ');
+        direction = kUp;
         break;
     case kLeft:
+        x = 0;
+        y = rand() % (maze.height - 2) + 1;
+        SetTile(maze, x++, y, ' ');
+        SetTile(maze, x, y, ' ');
+        direction = kRight;
         break;
     case kRight:
+        x = maze.width - 1;
+        y = rand() % (maze.height - 2) + 1;
+        SetTile(maze, x--, y, ' ');
+        SetTile(maze, x, y, ' ');
+        direction = kLeft;
         break;
+    default:
+        break;
+    }
+
+}
+
+void SetTile(Maze& maze, const int x, const int y, char tile)
+{
+    *(maze.buffer + x + y * maze.width) = tile;
+}
+
+char GetTile(const Maze& maze, const int x, const int y)
+{
+    return *(maze.buffer + x + y * maze.width);
+}
+
+bool IsDirectionEnable(const  Maze& maze, const int x, const int y, const Direction& direction, bool& isExitCreated)
+{
+    bool isEnable = false;
+    int nextX = 0;
+    int nextY = 0;
+
+    switch (direction)
+    {
+    case kUp:
+        nextX = x;
+        nextY = y - 1;
+        if (GetTile(maze, nextX, nextY) == ' ')
+        {
+            isEnable = true;
+        }
+        else if (nextY == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+        {
+            isExitCreated = true;
+            isEnable = true;
+        }
+        else if (nextY > 0 &&
+            GetTile(maze, nextX - 1, nextY) != ' ' &&
+            GetTile(maze, nextX, nextY - 1) != ' ' &&
+            GetTile(maze, nextX + 1, nextY) != ' ')
+        {
+            isEnable = true;
+        }
+        break;
+    case kDown:
+        nextX = x;
+        nextY = y + 1;
+        if (GetTile(maze, nextX, nextY) == ' ')
+        {
+            isEnable = true;
+        }
+        else if (nextY == maze.height - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+        {
+            isExitCreated = true;
+            isEnable = true;
+        }
+        else if (nextY < maze.height - 1 &&
+            GetTile(maze, nextX + 1, nextY) != ' ' &&
+            GetTile(maze, nextX, nextY + 1) != ' ' &&
+            GetTile(maze, nextX - 1, nextY) != ' ')
+        {
+            isEnable = true;
+        }
+        break;
+    case kLeft:
+        nextX = x - 1;
+        nextY = y;
+        if (GetTile(maze, nextX, nextY) == ' ')
+        {
+            isEnable = true;
+        }
+        else if (nextX == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+        {
+            isExitCreated = true;
+            isEnable = true;
+        }
+        else if (nextX > 0 &&
+            GetTile(maze, nextX, nextY + 1) != ' ' &&
+            GetTile(maze, nextX - 1, nextY) != ' ' &&
+            GetTile(maze, nextX, nextY - 1) != ' ')
+        {
+            isEnable = true;
+        }
+        break;
+    case kRight:
+        nextX = x + 1;
+        nextY = y;
+        if (GetTile(maze, nextX, nextY) == ' ')
+        {
+            isEnable = true;
+        }
+        else if (nextX == maze.width - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+        {
+            isExitCreated = true;
+            isEnable = true;
+        }
+        else if (nextX < maze.width - 1  &&
+            GetTile(maze, nextX, nextY - 1) != ' ' &&
+            GetTile(maze, nextX + 1, nextY) != ' ' &&
+            GetTile(maze, nextX, nextY + 1) != ' ')
+        {
+            isEnable = true;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return isEnable;
+}
+
+void PrintMaze(Maze& maze)
+{
+    for (int iY = 0; iY < maze.height; ++iY)
+    {
+        for (int iX = 0; iX < maze.width; ++iX)
+        {
+            cout << *(maze.buffer + iX + maze.width * iY);
+        }
+        cout << endl;
     }
 }
