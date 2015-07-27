@@ -21,16 +21,34 @@ enum Direction
 	LEFT,
 	RIGHT,
 };
+struct Stack
+{
+	Point* pointArray;
+	int index;
+};
 
 
 bool initMaze(Maze& maze);
 void uninitMaze(Maze& maze);
 void printMaze(Maze& maze);
-void makePath(Maze& maze, Point current);
+void makePath(Maze& maze, const Point& p, Stack& s);
 void swap(Point& a, Point& b);
 bool checkPoint(Maze& maze, Point& point);
 bool isValidPoint(const Maze& maze, const Point& p);
 Point getNextPoint(const Point& current, Direction direction);
+
+void push(Stack& s, Point& p)
+{
+	++s.index;
+	s.pointArray[s.index] = p;
+}
+
+Point pop(Stack& s)
+{
+	Point p = s.pointArray[s.index];
+	--s.index;
+	return p;
+}
 
 int main()
 {
@@ -39,13 +57,20 @@ int main()
 	Maze maze;
 	maze.board = NULL;
 
+	Stack s;
+	s.pointArray = NULL;
+	s.index = -1;
+
 	if (initMaze(maze) == false)
 	{
 		return 0;
 	}
 
-	makePath(maze, { 0, 0 });
+	s.pointArray = new Point[maze.rowSize * maze.colSize];
+
+	makePath(maze, { 0, 0 }, s);
 	printMaze(maze);
+	delete [] s.pointArray;
 	uninitMaze(maze);
 	return 0;
 }
@@ -79,47 +104,63 @@ bool isValidPoint(const Maze& maze, const Point& p)
 		p.y < maze.rowSize;
 }
 
-void makePath(Maze& maze, Point current)
+void makePath(Maze& maze, const Point& p, Stack& s)
 {
-	maze.board[current.y][current.x] = '1';
-
-	Point nexts[4];
-	for (int i = 0; i < 4; ++i)
+	Point current = p;
+	bool nextPoint = true;
+	do
 	{
-		nexts[i] = getNextPoint(current, (Direction)i);
-	}
-
-	//shuffle
-	for (int i = 3; i > 0; --i)
-	{
-		int j = rand() % (i + 1);
-		swap(nexts[i], nexts[j]);
-	}
-
-	for (int i = 0; i < 4; ++i)
-	{
-		if (isValidPoint(maze, nexts[i]) == true &&
-			checkPoint(maze, nexts[i]) == true)
+		if (nextPoint == true)
 		{
-			if (nexts[i].x > current.x)
-			{
-				maze.board[current.y][current.x + 1] = '1';
-			}
-			else if (nexts[i].x < current.x)
-			{
-				maze.board[current.y][current.x - 1] = '1';
-			}
-			else if (nexts[i].y > current.y)
-			{
-				maze.board[current.y + 1][current.x] = '1';
-			}
-			else if (nexts[i].y < current.y)
-			{
-				maze.board[current.y - 1][current.x] = '1';
-			}
-			makePath(maze, nexts[i]);
+			push(s, current);
 		}
-	}
+		maze.board[current.y][current.x] = '1';
+		Point nexts[4];
+		for (int i = 0; i < 4; ++i)
+		{
+			nexts[i] = getNextPoint(current, (Direction)i);
+		}
+
+		//shuffle
+		for (int i = 3; i > 0; --i)
+		{
+			int j = rand() % (i + 1);
+			swap(nexts[i], nexts[j]);
+		}
+		
+		nextPoint = false;
+		for (int i = 0; i < 4; ++i)
+		{
+			if (isValidPoint(maze, nexts[i]) == true &&
+				checkPoint(maze, nexts[i]) == true)
+			{
+				if (nexts[i].x > current.x)
+				{
+					maze.board[current.y][current.x + 1] = '1';
+				}
+				else if (nexts[i].x < current.x)
+				{
+					maze.board[current.y][current.x - 1] = '1';
+				}
+				else if (nexts[i].y > current.y)
+				{
+					maze.board[current.y + 1][current.x] = '1';
+				}
+				else if (nexts[i].y < current.y)
+				{
+					maze.board[current.y - 1][current.x] = '1';
+				}
+				current = nexts[i];
+				nextPoint = true;
+				break;
+			}
+		}
+		if (nextPoint == true)
+		{
+			continue;
+		}
+		current = pop(s);
+	} while (s.index >= 0);
 }
 
 bool initMaze(Maze& maze)
