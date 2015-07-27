@@ -33,6 +33,8 @@ bool IsDirectionEnable(const  Maze& maze, const int x, const int y, const Direct
 void PrintMaze(Maze& maze);
 
 
+Direction startDirection;
+
 int main(void)
 {
     Maze maze;
@@ -176,14 +178,7 @@ void InitializeMaze(Maze& maze)
     {
         for (int iX = 0; iX < maze.width; ++iX)
         {
-            if (iX == 0 || iY == 0 || iX == maze.width - 1 || iY == maze.height - 1)
-            {
-                *(maze.buffer + iX + iY * maze.width) = '#';
-            }
-            else
-            {
-                *(maze.buffer + iX + iY * maze.width) = '?';
-            }
+            *(maze.buffer + iX + iY * maze.width) = '#';
         }
     }
 }
@@ -196,8 +191,8 @@ void FinalizeMaze(Maze& maze)
 
 void GetEntry(Maze& maze, int& x, int& y, Direction& direction)
 {
-    direction = static_cast<Direction>(rand() % 4);
-    switch (direction)
+    startDirection = static_cast<Direction>(rand() % 4);
+    switch (startDirection)
     {
     case kUp:
         x = rand() % (maze.width - 2) + 1;
@@ -252,83 +247,95 @@ bool IsDirectionEnable(const  Maze& maze, const int x, const int y, const Direct
     switch (direction)
     {
     case kUp:
-        nextX = x;
-        nextY = y - 1;
-        if (GetTile(maze, nextX, nextY) == ' ')
+        if (x != 0 && x != maze.width - 1)
         {
-            isEnable = true;
-        }
-        else if (nextY == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
-        {
-            isExitCreated = true;
-            isEnable = true;
-        }
-        else if (nextY > 0 &&
-            GetTile(maze, nextX - 1, nextY) != ' ' &&
-            GetTile(maze, nextX, nextY - 1) != ' ' &&
-            GetTile(maze, nextX + 1, nextY) != ' ')
-        {
-            isEnable = true;
+            nextX = x;
+            nextY = y - 1;
+            if (GetTile(maze, nextX, nextY) == ' ')
+            {
+                isEnable = true;
+            }
+            else if (startDirection == kDown && nextY == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+            {
+                isExitCreated = true;
+                isEnable = true;
+            }
+            else if (nextY > 0 &&
+                GetTile(maze, nextX - 1, nextY) != ' ' &&
+                GetTile(maze, nextX, nextY - 1) != ' ' &&
+                GetTile(maze, nextX + 1, nextY) != ' ')
+            {
+                isEnable = true;
+            }
         }
         break;
     case kDown:
-        nextX = x;
-        nextY = y + 1;
-        if (GetTile(maze, nextX, nextY) == ' ')
+        if (x != 0 && x != maze.width - 1)
         {
-            isEnable = true;
-        }
-        else if (nextY == maze.height - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
-        {
-            isExitCreated = true;
-            isEnable = true;
-        }
-        else if (nextY < maze.height - 1 &&
-            GetTile(maze, nextX + 1, nextY) != ' ' &&
-            GetTile(maze, nextX, nextY + 1) != ' ' &&
-            GetTile(maze, nextX - 1, nextY) != ' ')
-        {
-            isEnable = true;
+            nextX = x;
+            nextY = y + 1;
+            if (GetTile(maze, nextX, nextY) == ' ')
+            {
+                isEnable = true;
+            }
+            else if (startDirection == kUp && nextY == maze.height - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+            {
+                isExitCreated = true;
+                isEnable = true;
+            }
+            else if (nextY < maze.height - 1 &&
+                GetTile(maze, nextX + 1, nextY) != ' ' &&
+                GetTile(maze, nextX, nextY + 1) != ' ' &&
+                GetTile(maze, nextX - 1, nextY) != ' ')
+            {
+                isEnable = true;
+            }
         }
         break;
     case kLeft:
-        nextX = x - 1;
-        nextY = y;
-        if (GetTile(maze, nextX, nextY) == ' ')
+        if (y != 0 && y != maze.height - 1)
         {
-            isEnable = true;
-        }
-        else if (nextX == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
-        {
-            isExitCreated = true;
-            isEnable = true;
-        }
-        else if (nextX > 0 &&
-            GetTile(maze, nextX, nextY + 1) != ' ' &&
-            GetTile(maze, nextX - 1, nextY) != ' ' &&
-            GetTile(maze, nextX, nextY - 1) != ' ')
-        {
-            isEnable = true;
+            nextX = x - 1;
+            nextY = y;
+            if (GetTile(maze, nextX, nextY) == ' ')
+            {
+                isEnable = true;
+            }
+            else if (startDirection == kRight && nextX == 0 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+            {
+                isExitCreated = true;
+                isEnable = true;
+            }
+            else if (nextX > 0 &&
+                GetTile(maze, nextX, nextY + 1) != ' ' &&
+                GetTile(maze, nextX - 1, nextY) != ' ' &&
+                GetTile(maze, nextX, nextY - 1) != ' ')
+            {
+                isEnable = true;
+            }
         }
         break;
     case kRight:
-        nextX = x + 1;
-        nextY = y;
-        if (GetTile(maze, nextX, nextY) == ' ')
+        if (y != 0 && y != maze.height - 1)
         {
-            isEnable = true;
-        }
-        else if (nextX == maze.width - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
-        {
-            isExitCreated = true;
-            isEnable = true;
-        }
-        else if (nextX < maze.width - 1  &&
-            GetTile(maze, nextX, nextY - 1) != ' ' &&
-            GetTile(maze, nextX + 1, nextY) != ' ' &&
-            GetTile(maze, nextX, nextY + 1) != ' ')
-        {
-            isEnable = true;
+            nextX = x + 1;
+            nextY = y;
+            if (GetTile(maze, nextX, nextY) == ' ')
+            {
+                isEnable = true;
+            }
+            else if (startDirection == kLeft && nextX == maze.width - 1 && isExitCreated == false && GetTile(maze, nextX, nextY) != ' ')
+            {
+                isExitCreated = true;
+                isEnable = true;
+            }
+            else if (nextX < maze.width - 1 &&
+                GetTile(maze, nextX, nextY - 1) != ' ' &&
+                GetTile(maze, nextX + 1, nextY) != ' ' &&
+                GetTile(maze, nextX, nextY + 1) != ' ')
+            {
+                isEnable = true;
+            }
         }
         break;
     default:
