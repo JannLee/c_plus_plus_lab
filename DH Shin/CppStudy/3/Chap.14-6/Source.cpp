@@ -114,7 +114,7 @@ void makePath(Maze& maze, const Point& p, Stack& s)
 		{
 			push(s, current);
 		}
-		maze.board[current.y][current.x] = '1';
+		maze.board[current.y][current.x] = ' ';
 		Point nexts[4];
 		for (int i = 0; i < 4; ++i)
 		{
@@ -136,19 +136,19 @@ void makePath(Maze& maze, const Point& p, Stack& s)
 			{
 				if (nexts[i].x > current.x)
 				{
-					maze.board[current.y][current.x + 1] = '1';
+					maze.board[current.y][current.x + 1] = ' ';
 				}
 				else if (nexts[i].x < current.x)
 				{
-					maze.board[current.y][current.x - 1] = '1';
+					maze.board[current.y][current.x - 1] = ' ';
 				}
 				else if (nexts[i].y > current.y)
 				{
-					maze.board[current.y + 1][current.x] = '1';
+					maze.board[current.y + 1][current.x] = ' ';
 				}
 				else if (nexts[i].y < current.y)
 				{
-					maze.board[current.y - 1][current.x] = '1';
+					maze.board[current.y - 1][current.x] = ' ';
 				}
 				current = nexts[i];
 				nextPoint = true;
@@ -181,7 +181,7 @@ bool initMaze(Maze& maze)
 	for (int i = 0; i < maze.rowSize; ++i)
 	{
 		maze.board[i] = new char[maze.colSize];
-		memset(maze.board[i], '0', maze.colSize * sizeof(char));
+		memset(maze.board[i], '#', maze.colSize * sizeof(char));
 	}
 
 	return true;
@@ -226,22 +226,22 @@ void swap(Point& a, Point& b)
 bool checkPoint(Maze& maze, Point& point)
 {
 	if (isValidPoint(maze, { point.x - 1, point.y }) == true &&
-		maze.board[point.y][point.x - 1] == '1')
+		maze.board[point.y][point.x - 1] == ' ')
 	{
 		return false;
 	}
 	if (isValidPoint(maze, { point.x + 1, point.y }) == true &&
-		maze.board[point.y][point.x + 1] == '1')
+		maze.board[point.y][point.x + 1] == ' ')
 	{
 		return false;
 	}
 	if (isValidPoint(maze, { point.x, point.y - 1 }) == true &&
-		maze.board[point.y - 1][point.x] == '1')
+		maze.board[point.y - 1][point.x] == ' ')
 	{
 		return false;
 	}
 	if (isValidPoint(maze, { point.x, point.y + 1 }) == true &&
-		maze.board[point.y + 1][point.x] == '1')
+		maze.board[point.y + 1][point.x] == ' ')
 	{
 		return false;
 	}
