@@ -29,9 +29,11 @@ int main() {
 
 	Maze maze;
 	cout << "가로 : ";
-	cin >> maze.width;
+	//cin >> maze.width;
 	cout << "세로 : ";
-	cin >> maze.height;
+	//cin >> maze.height;
+	maze.width = 60;
+	maze.height = 60;
 
 	maze.map = new int*[maze.width];
 	for (int i = 0; i < maze.width; ++i)
@@ -75,7 +77,7 @@ int main() {
 		delete[] maze.map[i];
 	}
 	delete[] maze.map;
-	cin.get();
+	//cin.get();
 	return 0;
 }
 
@@ -95,45 +97,23 @@ void makePath(Maze& maze, Point point) {
 }
 
 Point getNext(Maze& maze, Point oriPoint) {
-	int direction = rand() % 10;
+	int direction = (rand() % 10) + 1;
 	Point point = oriPoint;
-	switch (direction) {
-	case 0:
-		point.x++;
-		break;
-	case 1:
-		point.y++;
-		break;
-	case 2:
-		point.x++;
-		break;
-	case 3:
-		point.y++;
-		break;
-	case 4:
-		point.x++;
-		break;
-	case 5:
-		point.y++;
-		break;
-	case 6:
-		point.x--;
-		break;
-	case 7:
-		point.y--;
-		break;
-	case 8:
-		point.x--;
-		break;
-	case 9:
-		point.y--;
-		break;
-	case 10:
-		point.x--;
-		break;
-	case 11:
-		point.y--;
-		break;
+	if (direction % 2 == 0) {
+		if (direction > 6) {
+			point.x--;
+		}
+		else {
+			point.x++;
+		}
+	}
+	else {
+		if (direction > 6) {
+			point.y--;
+		}
+		else {
+			point.y++;
+		}
 	}
 	return point;
 }
