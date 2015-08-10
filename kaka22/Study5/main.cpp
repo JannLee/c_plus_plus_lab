@@ -103,6 +103,14 @@ LinkedList* recurrenceAdd	(LinkedList* pList, int idx)
 
 int main()
 {
-	
+	int A = 1;
+	int B = 1;
+	int C = 1;
+	int D = 0;
+	if ((A == 2 && B = 2) || (C && B = 1) || (B = 0))
+	{
+		D = A + B + C;
+	}
+
 	return 0;
 }
