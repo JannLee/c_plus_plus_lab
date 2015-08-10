@@ -28,7 +28,7 @@ node* insert(node* p_tree, const std::string& newName, const std::string& newEma
 		return p_new_tree;
 	}
 
-	if (newName < p_tree->name)
+	if (p_tree->p_left == nullptr)
 	{
 		p_tree->p_left = insert(p_tree->p_left, newName, newEmail);
 	}
@@ -101,8 +101,8 @@ node* remove(node* p_tree, std::string& deleteName)
 			return p_left_subtree;
 		}
 		node* p_max_node = find_max(p_tree->p_left);
-		p_max_node->p_left == p_tree->p_left;
-		p_max_node->p_right == p_tree->p_right;
+		p_max_node->p_left = p_tree->p_left;
+		p_max_node->p_right = p_tree->p_right;
 		delete p_tree;
 		return p_max_node;
 	}
