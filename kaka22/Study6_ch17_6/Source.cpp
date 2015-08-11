@@ -28,7 +28,7 @@ node* insert(node* p_tree, const std::string& newName, const std::string& newEma
 		return p_new_tree;
 	}
 
-	if (newName < p_tree->name)
+	if (newName.size() < p_tree->name.size()  )
 	{
 		p_tree->p_left = insert(p_tree->p_left, newName, newEmail);
 	}
@@ -101,8 +101,8 @@ node* remove(node* p_tree, std::string& deleteName)
 			return p_left_subtree;
 		}
 		node* p_max_node = find_max(p_tree->p_left);
-		p_max_node->p_left == p_tree->p_left;
-		p_max_node->p_right == p_tree->p_right;
+		p_max_node->p_left = p_tree->p_left;
+		p_max_node->p_right = p_tree->p_right;
 		delete p_tree;
 		return p_max_node;
 	}
@@ -119,15 +119,51 @@ node* remove(node* p_tree, std::string& deleteName)
 
 int main()
 {
-	node* pNode_tree_header = nullptr;
+	int selec = 0;
+	std::string node_value;
+	std::string node_mail;
+	node *p_root = NULL;
 
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds1"), std::string("123x@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds2"), std::string("1235@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds3"), std::string("1236@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds4"), std::string("1237@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds5"), std::string("1238@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds6"), std::string("1239@est.com"));
-	pNode_tree_header = insert(pNode_tree_header, std::string("kds7"), std::string("1230@est.com"));
-
-	return 0;
+	while (true)
+	{
+		std::cout << " 1. 추가 \n 2. 삭제 \n 3. 검색 \n 4. 전체 삭제\n 5. 종료\n";
+		std::cin >> selec;
+		switch (selec)
+		{
+		case 1:
+			std::cout << "이름: ";
+			std::cin >> node_value;
+			std::cout << "메일: ";
+			std::cin >> node_mail;
+			p_root = insert(p_root, node_value, node_mail);
+			break;
+		case 2:
+			std::cin >> node_value;
+			p_root = remove(p_root, node_value);
+			break;
+		case 4:
+			destroy_tree(p_root);
+			p_root = NULL;
+			break;
+		case 3:
+			// add an extra scope in order to declare p_search_node
+			// without leaking it beyond  the case statement
+		{
+			std::cout << "무엇을 찾으시겠소?: ";
+			std::cin >> node_value;
+			node* p_search_node = search(p_root, node_value);
+			if (p_search_node != NULL)
+			{
+				std::cout << p_search_node->Email.c_str() << std::endl;
+			}
+			else
+			{
+				std::cout << "검색 결과 없음" << std::endl;
+			}
+		}
+		break;
+		case 5:
+			return 0;
+		}
+	}
 }
