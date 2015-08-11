@@ -23,8 +23,8 @@ int main()
 {
 	node *AddressBook = NULL;
 
-	string name = NULL;
-	string email = NULL;
+	string name;
+	string email;
 	
 	int input = 0;
 	while (input < 5)
@@ -36,9 +36,9 @@ int main()
 		cout << "4 : Search" << endl;
 		cout << "5 : Exit" << endl;
 		cin >> input;
-		system("cls");
+		//system("cls");
 
-		if (input == '1')
+		if (input == 1)
 		{
 			cout << "Name ? : ";
 			cin >> name;
@@ -46,13 +46,13 @@ int main()
 			cin >> email;
 			AddressBook = insert(AddressBook, name, email);
 		}
-		else if (input == '2')
+		else if (input == 2)
 		{
 			cout << "Name ? : ";
 			cin >> name;
 			AddressBook = remove(AddressBook, name);
 		}
-		else if (input == '3')
+		else if (input == 3)
 		{
 			cout << "Name ? : ";
 			cin >> name;
@@ -60,7 +60,7 @@ int main()
 			cin >> email;
 			AddressBook = update(AddressBook, name, email);
 		}
-		else if (input == '4')
+		else if (input == 4)
 		{
 			cout << "Name ? : ";
 			cin >> name;
@@ -74,7 +74,7 @@ int main()
 				cout << "can't find name.." << endl;
 			}
 		}
-		else if (input == '5')
+		else if (input == 5)
 		{
 			destroy_tree(AddressBook);
 		}
@@ -140,9 +140,9 @@ node *find_max(node *p_tree)
 
 node *remove_max_node(node *p_tree, node *p_max_node)
 {
-	if (p_tree == nullptr)
+	if (p_tree == NULL)
 	{
-		return nullptr;
+		return NULL;
 	}
 	if (p_tree == p_max_node)
 	{
