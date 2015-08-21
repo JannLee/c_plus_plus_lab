@@ -12,6 +12,7 @@ int main()
 	v1.printElements();
 	v2.printElements();
 	v2.pushback(1);
+	v2.printElements();
 	v2.pushfront(2);
 	v2.printElements();
 
