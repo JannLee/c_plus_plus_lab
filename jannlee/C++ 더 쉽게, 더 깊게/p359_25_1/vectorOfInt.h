@@ -3,8 +3,11 @@ class vectorOfInt
 {
 public:
     vectorOfInt();
-    vectorOfInt(const int size);
+    vectorOfInt(const size_t size);
+    vectorOfInt(const vectorOfInt& other);
     virtual ~vectorOfInt();
+
+    vectorOfInt& operator=(const vectorOfInt& other);
 
     bool get(const size_t index, int& value);
     bool set(const size_t index, const int value);
