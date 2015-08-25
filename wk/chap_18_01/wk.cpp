@@ -4,10 +4,10 @@
 
 using namespace std;
 
-void insert(map<string, string>& AddressBook);
-void erase(map<string, string>& AddressBook);
-void update(map<string, string>& AddressBook);
-void search(map<string, string>& AddressBook);
+void insert(map<string, string> &AddressBook);
+void erase(map<string, string> &AddressBook);
+void update(map<string, string> &AddressBook);
+void search(map<string, string> &AddressBook);
 
 
 int main()
@@ -47,7 +47,7 @@ int main()
 	
 }
 
-void insert(map<string, string>& AddressBook)
+void insert(map<string, string> &AddressBook)
 {
 	string name;
 	string email;
@@ -62,7 +62,7 @@ void insert(map<string, string>& AddressBook)
 	system("cls");
 }
 
-void erase(map<string, string>& AddressBook)
+void erase(map<string, string> &AddressBook)
 {
 	string name;
 	cout << "Name ? : ";
@@ -73,7 +73,7 @@ void erase(map<string, string>& AddressBook)
 	system("cls");
 }
 
-void update(map<string, string>& AddressBook)
+void update(map<string, string> &AddressBook)
 {
 	string name;
 	string email;
@@ -96,7 +96,7 @@ void update(map<string, string>& AddressBook)
 	}
 }
 
-void search(map<string, string>& AddressBook)
+void search(map<string, string> &AddressBook)
 {
 	string name;
 	cout << "Name ? : ";
