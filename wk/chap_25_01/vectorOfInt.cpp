@@ -26,7 +26,7 @@ vectorOfInt::~vectorOfInt()
 	}
 }
 
-vectorOfInt& vectorOfInt::operator=(const vectorOfInt& other)
+vectorOfInt &vectorOfInt::operator=(const vectorOfInt &other)
 {
 	if (this == &other)
 	{
@@ -51,24 +51,22 @@ void vectorOfInt::set(int index, int value)
 
 void vectorOfInt::pushback(int value)
 {
-	int* new_data = new int[size + 1];
+	int *new_data = new int[size + 1];
 	memcpy(new_data, data, sizeof(int) * size);
 	new_data[size] = value;
-	data = new_data;
-	++size;
-	
 	delete[] data;
+	data = new_data;
+	++size;	
 }
 
 void vectorOfInt::pushfront(int value)
 {
-	int* new_data = new int[size + 1];
+	int *new_data = new int[size + 1];
 	memcpy(new_data + 1, data, sizeof(int) * size);
 	new_data[0] = value;
+	delete[] data;
 	data = new_data;
 	++size;
-	
-	delete[] data;
 }
 
 void vectorOfInt::print_array()
